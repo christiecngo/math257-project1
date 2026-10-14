@@ -19,11 +19,11 @@ $$\mathbf{X}_{lj} = \mathbf{\mu} + \mathbf{\tau}_l + \mathbf{e}_{lj}$$ $l$ is th
 
 ## Assumptions
 
-* Both populations are distributed as multivariate normal (univariate normal for ANOVA).
+- Both populations are distributed as multivariate normal (univariate normal for ANOVA).
 
-* Observations are randomly sampled from their respective population and independent within and between groups.
+- Observations are randomly sampled from their respective population and independent within and between groups.
 
-* The two groups share a common variance ($\Sigma$ matrix in MANOVA).
+- The two groups share a common variance ($\Sigma$ matrix in MANOVA).
 
 ## Hypothesis Testing
 
@@ -57,7 +57,7 @@ To visually assess the strength of the cyclic relationship, we use the Autocorre
 
 We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. Using the ACF plot below, we can confirm that there is still seasonality in our generated dataset.
 
-```{r, include=FALSE}
+```{r}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -70,6 +70,8 @@ fail_match = 0
 y1_capture = 0
 y2_capture = 0
 y3_capture = 0
+manova_reject = 0
+anova_reject = 0
 
 for (i in 1:r){
   x <- seq(0, 32 * pi, length.out = n)+rnorm(200, sd=0.1)
@@ -116,6 +118,7 @@ for (i in 1:r){
 
   count = 0
   if (manova_p_value <= alpha){
+    manova_reject = manova_reject+1
     if (y1_pvalue <= alpha/3){
       count = count + 1
     }
@@ -128,6 +131,7 @@ for (i in 1:r){
     
     if (count >= 2){
       reject_match = reject_match + 1
+      anova_reject = anova_reject + 1
     }
   }
   
@@ -144,7 +148,7 @@ for (i in 1:r){
     
     if (count >= 2){
       fail_match = fail_match + 1
-    }
+    } else{ anova_reject = anova_reject + 1 }
   }
     
   }
@@ -157,6 +161,12 @@ test1_matching_fail = fail_match/1000
 
 paste0("Proportion of matching reject: ", (reject_match)/1000)
 test1_matching_reject = reject_match/1000
+
+paste0("Proportion of MANOVA reject: ", (manova_reject)/1000)
+test1_manova_reject = manova_reject/1000
+
+paste0("Proportion of ANOVA majority reject: ", (anova_reject)/1000)
+test1_anova_reject = anova_reject/1000
 
 paste0("Proportion of mismatched results: ", (1000-fail_match+reject_match)/1000)
 test1_mismatched = (1000-fail_match+reject_match)/1000
@@ -204,7 +214,7 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 For our second simulation, we want to see if adding sufficient noise to effectively reduce dependence between points in the cycle will lead to hypothesis tests detecting significant differences between populations, despite them being the identically distributed. Again, we examine the ACF plot to confirm there is no longer a trend within the lags.
 
-```{r, include=FALSE}
+```{r}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -216,6 +226,8 @@ fail_match = 0
 y1_capture = 0
 y2_capture = 0
 y3_capture = 0
+manova_failreject = 0
+anova_failreject = 0
 
 for (i in 1:r){
   x <- seq(0, 32 * pi, length.out = n)+rnorm(200, sd=1)
@@ -275,10 +287,11 @@ for (i in 1:r){
     
     if (count >= 2){
       reject_match = reject_match + 1
-    }
+    } else { anova_failreject = anova_failreject + 1 }
   }
   
   else{
+    manova_failreject = manova_failreject+1
     if (y1_pvalue > alpha/3){
       count = count + 1
     }
@@ -291,6 +304,7 @@ for (i in 1:r){
     
     if (count >= 2){
       fail_match = fail_match + 1
+      anova_failreject = anova_failreject+1
     }
   }
     
@@ -302,6 +316,12 @@ test2_matching = (fail_match+reject_match)/1000
 
 paste0("Proportion of matching fail to reject: ", (fail_match)/1000)
 test2_matching_fail = fail_match/1000
+
+paste0("Proportion of MANOVA fail to reject: ", (manova_failreject)/1000)
+test2_manova_fail = manova_failreject/1000
+
+paste0("Proportion of ANOVA majority fail to reject: ", (anova_failreject)/1000)
+test2_anova_fail = anova_failreject/1000
 
 paste0("Proportion of matching reject: ", (reject_match)/1000)
 test2_matching_reject = reject_match/1000
@@ -349,7 +369,5 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 ```
 
 # Results
-
-
 
 # Discussion
