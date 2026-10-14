@@ -1,4 +1,4 @@
-# Tradeoff Between Univariate ANOVA Versus MANOVA Hypothesis Testing of Cyclic Data Variants
+# Comparing Univariate ANOVA and MANOVA for Hypothesis Testing in Cyclic Data Settings
 Date of submission: 11/04/2026
 
 An exploratory simulation on the advantages and disadvantages of MANOVA with its univariate counterpart in the following cyclic data scenarios:
