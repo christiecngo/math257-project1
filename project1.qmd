@@ -11,7 +11,7 @@ Real world data is rarely perfectly normally distributed. Though many statistica
 
 When observations within a single population follow a trend, independence is violated and there is an inflated type one error rate along with biased p-values. To understand how cyclic data can influence Multivariate Analysis of Variance (MANOVA), 3-dimensional data is simulated for two distinct populations in R. For the first question, we test if violations to the independence assumption of cyclic data can still detect a true difference in population means. Our second question of interest pertains to whether the same mean vectors will register as so when we add sufficient noise to negate the cyclic dependency. In both scenarios, we compare the results between the MANOVA output with the majority hypothesis decision for the univariate ANOVA tests, corrected using Bonferroni for multiple testing.
 
-
+Findings indicate that 
 
 
 
@@ -61,7 +61,7 @@ To visually assess the strength of the cyclic relationship, we use the Autocorre
 
 We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. The differences are apparent in the lack of overlap between the populations in @partone3d. Using the @acfone plot below, we can confirm that there is still seasonality in our generated dataset.
 
-```{r, include=FALSE}
+```{r}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -218,7 +218,7 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 For our second simulation, we want to see if adding sufficient noise to effectively reduce dependence between points in the cycle will lead to hypothesis tests detecting significant differences between populations, despite them being identically distributed. We ended up with adding normal errors with a standard deviation before the independence assumption held. In the @parttwo3d plot, we can see that the noise now makes the populations appear indistinguishable, which is promising given their identical distributions. Again, we examine the ACF plot (@acftwo) to confirm there is no longer a trend within the lags.
 
-```{r, include=FALSE}
+```{r}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -374,6 +374,9 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 # Results
 
+When considering the aggregated outcomes of 1000 trials for each research setting, there was neither MANOVA nor ANOVA outperformed the other in entirety. In the first experiment involving a true difference in means with an independence violation, MANOVA undoubtedly returned better results. Although each univariate ANOVA successfully captured the true difference in means parameter for each dimension in all of the trials, the majority decision never rejected the null hypothesis. On the other hand, MANOVA acknowledged the true difference in means for 76% of the trials. In this case, MANOVA is more promising for detecting a small population difference within cyclic data.
+
+For the second experiment with achieving independence from same distribution cyclic data, the results of both methods were comparable. In this setting, ANOVA confidence intervals for the true difference in means contained the true parameter roughly 98% of the time, instead of 100% as it was previously. ANOVA failed to reject the null hypothesis in every trial while MANOVA failed to reject 99.3% of the time. Since the added normal noise had a sizable standard deviation and the population scatterplots are entirely overlapped, it is expected that both methods were able to easily detect no difference in means.  
 
 
 # Discussion
