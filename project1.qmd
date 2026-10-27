@@ -1,5 +1,5 @@
 ---
-title: "Project 1"
+title: "Comparing Univariate ANOVA and MANOVA for Hypothesis Testing in Cyclic Data Settings"
 author: "Christie Ngo"
 format: typst
 editor: visual
