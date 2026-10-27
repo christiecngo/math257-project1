@@ -9,7 +9,11 @@ editor: visual
 
 Real world data is rarely perfectly normally distributed. Though many statistical models require assumptions to hold true for inference, there is still valuable information extracted from imperfect data. Especially in nature, patterns often surface when considering biological and seasonal phenomena. Data extracted ranging the angular velocity of zebrafish in circular wells or heart rhythm monitoring can lead to predictable cycles.
 
-When observations within a single population follow a trend, independence is violated and there is an inflated type one error rate along with biased p-values. To understand how cyclic data can influence Multivariate Analysis of Variance (MANOVA), 3-dimensional data is simulated for two distinct populations in R. For the first question, we test if violations to the independence assumption of cyclic data can still detect a true difference in population means. Our second question of interest pertains to whether the same mean vectors will register as so when we add sufficient noise to negate the cyclic dependency. In both scenarios, we compare the results between the MANOVA output with the majority hypothesis decision for the univariate ANOVA tests.
+When observations within a single population follow a trend, independence is violated and there is an inflated type one error rate along with biased p-values. To understand how cyclic data can influence Multivariate Analysis of Variance (MANOVA), 3-dimensional data is simulated for two distinct populations in R. For the first question, we test if violations to the independence assumption of cyclic data can still detect a true difference in population means. Our second question of interest pertains to whether the same mean vectors will register as so when we add sufficient noise to negate the cyclic dependency. In both scenarios, we compare the results between the MANOVA output with the majority hypothesis decision for the univariate ANOVA tests, corrected using Bonferroni for multiple testing.
+
+
+
+
 
 # Method
 
@@ -29,7 +33,7 @@ $$\mathbf{X}_{lj} = \mathbf{\mu} + \mathbf{\tau}_l + \mathbf{e}_{lj}$$ $l$ is th
 
 We let the baseline population be $1$ and the modified population be $2$. Our testing is as followed:
 
-ANOVA:
+ANOVA (for each of the dimensions):
 
 $H_0: \mu_1 = \mu_2$
 
@@ -47,7 +51,7 @@ To account for the repeated univariate tests, we apply the Bonferroni correction
 
 ## Simulations
 
-In both generated datasets, we create two populations with three dimensions and $200$ observations. The independent vector $x$ consists of 200 points equally spaced across $32\pi$ or 16 rotations (with the addition of some normally distributed noise centered at 0). The dependent vectors $Y1$, $Y2$, and $Y3$ use the sine of $x$ function, the cosine of $x$ function, and sine of $2x$ function, respectively. Without any modifications, the mean value of each function should be symmetric about and thus have an expected value of 0.
+In both generated datasets, we create two populations with three dimensions and $200$ observations. The independent vector $x$ consists of 200 points equally spaced across $32\pi$ or 16 rotations (with the addition of some normally distributed noise centered at 0 with a low standard deviation of 0.1). The dependent vectors $Y1$, $Y2$, and $Y3$ use the sine of $x$ function, the cosine of $x$ function, and sine of $2x$ function, respectively. Without any modifications, the mean value of each function should be symmetric about and thus have an expected value of 0.
 
 #### Cyclic Dependency
 
@@ -55,9 +59,9 @@ To visually assess the strength of the cyclic relationship, we use the Autocorre
 
 #### True difference in means
 
-We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. Using the ACF plot below, we can confirm that there is still seasonality in our generated dataset.
+We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. The differences are apparent in the lack of overlap between the populations in @partone3d. Using the @acfone plot below, we can confirm that there is still seasonality in our generated dataset.
 
-```{r}
+```{r, include=FALSE}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -189,7 +193,7 @@ fit <- lm(
 E <- residuals(fit)
 ```
 
-```{r, warning=FALSE, echo=FALSE}
+```{r partone3d, fig.cap="3D Scatterplot of True Difference In Cyclic Means", warning=FALSE, echo=FALSE}
 library(plotly)
 
 plot_ly(data = dat, 
@@ -202,7 +206,7 @@ plot_ly(data = dat,
         mode = "markers")
 ```
 
-```{r, warning=FALSE, echo=FALSE}
+```{r acfone, fig.cap="ACF Plot of Each Dimension's Residuals for True Difference In Cyclic Means", warning=FALSE, echo=FALSE}
 par(mfrow = c(3, 1))
 
 acf(E[, "Y1"], main = "ACF of y1 residuals")
@@ -212,9 +216,9 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 #### Independence from cyclic data
 
-For our second simulation, we want to see if adding sufficient noise to effectively reduce dependence between points in the cycle will lead to hypothesis tests detecting significant differences between populations, despite them being the identically distributed. Again, we examine the ACF plot to confirm there is no longer a trend within the lags.
+For our second simulation, we want to see if adding sufficient noise to effectively reduce dependence between points in the cycle will lead to hypothesis tests detecting significant differences between populations, despite them being identically distributed. We ended up with adding normal errors with a standard deviation before the independence assumption held. In the @parttwo3d plot, we can see that the noise now makes the populations appear indistinguishable, which is promising given their identical distributions. Again, we examine the ACF plot (@acftwo) to confirm there is no longer a trend within the lags.
 
-```{r}
+```{r, include=FALSE}
 library(mvtnorm)
 library(tidyverse)
 set.seed(15)
@@ -347,7 +351,7 @@ fit <- lm(
 E <- residuals(fit)
 ```
 
-```{r, warning=FALSE, echo=FALSE}
+```{r parttwo3d, fig.cap="3D Scatterplot of Independence from Cyclic Data", warning=FALSE, echo=FALSE}
 library(plotly)
 
 plot_ly(data = dat, 
@@ -355,12 +359,12 @@ plot_ly(data = dat,
         y = ~Y2, 
         z = ~Y3, 
         color = ~group,          
-        colors = c("#0074D9", "#FF851B"),
+        colors = c("#0057B8", "#007A73"),
         type = "scatter3d", 
         mode = "markers")
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r acftwo, fig.cap="ACF Plot of Each Dimension's Residuals for Independence from Cyclic Data", echo=FALSE, warning=FALSE}
 par(mfrow = c(3, 1))
 
 acf(E[, "Y1"], main = "ACF of y1 residuals")
@@ -370,4 +374,8 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 # Results
 
+
+
 # Discussion
+
+
