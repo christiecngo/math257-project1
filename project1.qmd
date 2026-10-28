@@ -49,6 +49,10 @@ $H_a: \vec{\mu}_1 \neq \vec{\mu}_2$
 
 To account for the repeated univariate tests, we apply the Bonferroni correction by dividing our $alpha = 0.05$ value by the number of tests ($3$). Because increasing the number of tests allows for more opportunity to obtain a significant result due to chance, we account for this by using a more conservative p-value threshold.
 
+## Technology
+
+Data simulations and hypothesis testing were all conducted using R software. The following packages were used: mvtnorm, tidyverse, and plotly.
+
 ## Simulations
 
 In both generated datasets, we create two populations with three dimensions and $200$ observations. The independent vector $x$ consists of 200 points equally spaced across $32\pi$ or 16 rotations (with the addition of some normally distributed noise centered at 0 with a low standard deviation of 0.1). The dependent vectors $Y1$, $Y2$, and $Y3$ use the sine of $x$ function, the cosine of $x$ function, and sine of $2x$ function, respectively. Without any modifications, the mean value of each function should be symmetric about and thus have an expected value of 0.
