@@ -7,7 +7,7 @@ An exploratory simulation on the advantages and disadvantages of MANOVA with its
 
 ## Data 
 
-Data used in this project is simulated in R.
+All data analyzed in this study were simulated by the author using R and are not subject to third-party data-use restrictions.
 
 ## Organization
 
