@@ -1,5 +1,5 @@
 # Comparing Univariate ANOVA and MANOVA for Hypothesis Testing in Cyclic Data Settings
-Date of submission: 11/04/2026
+Date of submission: 11/08/2026
 
 An exploratory simulation on the advantages and disadvantages of MANOVA with its univariate counterpart in the following cyclic data scenarios:
 1) True Difference in Population Means with Independence Violation
