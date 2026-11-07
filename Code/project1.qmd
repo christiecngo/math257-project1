@@ -8,6 +8,9 @@ editor: visual
 format: 
   pdf:
     fig-pos: "H"
+    include-in-header:
+      text: |
+        \usepackage{float}
 bibliography: references.bib
 number-sections: true
 ---
@@ -57,7 +60,7 @@ To account for the repeated univariate tests, we apply the Bonferroni correction
 
 ## Technology
 
-Data simulations and hypothesis testing were all conducted using @RCoreTeam software. The following packages were used: mvtnorm, tidyverse, and plotly. ChatGPT (@openai_chatgpt) was used for formatting tables and figures as well as some conceptual verification. 
+Data simulations and hypothesis testing were all conducted using R software (@RCoreTeam). The following packages were used: mvtnorm, tidyverse, and plotly. ChatGPT (@openai_chatgpt) was used for formatting tables and figures as well as some conceptual verification. 
 
 ## Simulations
 
@@ -205,7 +208,7 @@ E <- residuals(fit)
 
 ```{r fig-partone3d, fig.cap="3D Scatterplot of True Difference In Cyclic Means", warning=FALSE, echo=FALSE}
 #| fig-width: 10
-#| fig-height: 10
+#| fig-height: 8
 library(scatterplot3d)
 
 group_factor <- factor(dat$group)
@@ -381,9 +384,9 @@ fit <- lm(
 E <- residuals(fit)
 ```
 
-```{r fig-parttwo3d, fig.cap="3D Scatterplot of Independence from Cyclic Data", warning=FALSE, echo=FALSE}
+```{r fig-parttwo3d, fig.cap="3D Scatterplot of Independence from Cyclic Data", message=FALSE, warning=FALSE, echo=FALSE}
 #| fig-width: 10
-#| fig-height: 10
+#| fig-height: 8
 library(scatterplot3d)
 
 group_factor <- factor(dat$group)
@@ -425,7 +428,7 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 # Results
 
-\begin{table}
+\begin{table}[H]
 \centering
 \caption{Table 1: True Difference in Means Trial Results (Expected: Reject Null)}
 \label{tbl-true-difference-means}
@@ -448,7 +451,7 @@ True $Y_3$ value & 100.0\% \\
 
 In the first experiment involving a true difference in means with an independence violation, MANOVA undoubtedly returned better results (@tbl-true-difference-means). Although each univariate ANOVA successfully captured the true difference in means parameter for each dimension in all of the trials, the majority decision never rejected the null hypothesis. On the other hand, MANOVA acknowledged the true difference in means for 76% of the trials. In this case, MANOVA is more promising for detecting a small population difference within cyclic data.
 
-\begin{table}
+\begin{table}[H]
 \centering
 \caption{Table 2: Independence from Cyclic Data Trial Results (Expected: Fail to Reject Null)}
 \label{tbl-cyclic-independence}
