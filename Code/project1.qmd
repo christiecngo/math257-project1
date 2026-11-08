@@ -19,9 +19,9 @@ number-sections: true
 
 # Introduction
 
-Real world data is rarely perfectly normally distributed. Though many statistical models require assumptions to hold true for inference, there is still valuable information extracted from imperfect data. Especially in nature, patterns often surface when considering biological and seasonal phenomena. Data extracted ranging the angular velocity of zebrafish in circular wells or heart rhythm monitoring can lead to predictable cycles. According to past zoology research from Lander et al. (@landler2022multivariate), circular data can be statistically addressed using Multivariate Analysis of Variance (MANOVA) to broaden the scientific applications.
+Real world data is rarely perfectly normally distributed. Though many statistical models require assumptions to hold true for inference, there is still valuable information extracted from imperfect data. Especially in nature, patterns often surface when considering biological and seasonal phenomena. For example, data extracted ranging from the angular velocity of zebrafish in circular wells to heart rhythm monitoring can lead to predictable cycles. According to past ecology research paper, "The Multivariate Analysis of Variance as a Powerful Approach for Circular Data" (@landler2022multivariate), this circular data can be statistically addressed using Multivariate Analysis of Variance (MANOVA) to broaden the scientific applications.
 
-When observations within a single population follow a trend, independence is violated and there is an inflated type one error rate along with biased p-values. We aim to extend Lander et al.'s research by observing how cyclic data can influence MANOVA compared to univariate ANOVA, 3-dimensional data is simulated for two distinct populations in R. For our first experiment, we test if violations to the independence assumption of cyclic data can still detect a true difference in population means. Our second question of interest pertains to whether the same mean vectors will register as so when we add sufficient noise to negate the cyclic dependency. In both scenarios, we compare the results between the MANOVA output with the majority hypothesis decision for the univariate ANOVA tests, corrected using Bonferroni for multiple testing.
+When observations within a single population follow a trend, independence is violated, leading to inflated type one error rates along with biased p-values. To extend beyond Lander et al.'s research, we will observe how cyclic data can impact the hypothesis testing performance of MANOVA compared to univariate ANOVA. In order to do so, we will simulate 3-dimensional data for two distinct populations using R. For our first experiment, we test if violations to the independence assumption of cyclic data can still detect a true difference in population means. Our second question of interest pertains to whether the same mean vectors will register as so when we add sufficient noise to negate the cyclic dependency. In both scenarios, we compare the results between the MANOVA output with the majority hypothesis decision for the univariate ANOVA tests, corrected using Bonferroni for multiple testing.
 
 Findings indicate that MANOVA is considerably superior to ANOVA at detecting a true difference in means while performance is comparable between methods when there is addition of enough noise to mask data dependency. We corroborate that MANOVA is adequate at detecting differences in means for circular data despite its independence violation. Future areas of study include differing the length of cycles between populations and incorporating errors in only some dependent responses.
 
@@ -63,15 +63,15 @@ To account for the repeated univariate tests, we apply the Bonferroni correction
 
 ## Technology
 
-Data simulations and hypothesis testing were all conducted using R software (@RCoreTeam). The following packages were used: mvtnorm, tidyverse, and plotly. ChatGPT (@openai_chatgpt) was used for formatting tables and figures as well as some conceptual verification.
+Data simulations and hypothesis testing were all conducted using R software (@RCoreTeam). The following packages were used: mvtnorm, tidyverse, and scatterplot3d. ChatGPT (@openai_chatgpt) was used for formatting tables and figures as well as some conceptual verification.
 
 ## Simulations
 
-In both generated datasets, we create two populations with three dimensions and $200$ observations. The independent vector $x$ consists of 200 points equally spaced across $32\pi$ or 16 rotations (with the addition of some normally distributed noise centered at 0 with a low standard deviation of 0.1). Each observational unit is a data point within the rotation. The dependent vectors $Y1$, $Y2$, and $Y3$ apply the sine of $x$ function, the cosine of $x$ function, and sine of $2x$ function, respectively. Without any modifications, the mean value of each function should be symmetric about and thus have an expected value of 0.
+In both generated datasets, we create two populations with three dimensions and $200$ observations. The independent vector $x$ consists of 200 points equally spaced across $32\pi$ or 16 rotations (with the addition of some normally distributed noise centered at 0 with a low standard deviation of 0.1). Each observational unit is a data point within the rotation. The dependent vectors $Y1$, $Y2$, and $Y3$ apply the sine of $x$ function, the cosine of $x$ function, and sine of $2x$ function, respectively. Without any modifications, the mean value of each function should be symmetric with respect to the x-axis and thus have an expected value of 0.
 
 #### Cyclic Dependency
 
-To visually assess the strength of the cyclic relationship, we use the Autocorrelation Function (ACF) plot. At each lag, or data at a set point a past time, we are able to determine its correlation with the series. Repeating peaks at predictable time intervals indicate seasonality. The blue dotted bands represent a 95% confidence limit, which tests for correlations within observations. If spikes fall within the bands, then it can be treated as random noise. 
+To visually assess the strength of the cyclic relationship, we use the Autocorrelation Function (ACF) plot. At each lag, which comprises of data at past times in the series, we are able to determine its correlation with the series. Repeating peaks at predictable time intervals indicate seasonality. The blue dotted bands represent a 95% confidence limit, which tests for correlations within observations. If spikes fall within the bands, then it can be treated as random noise. 
 
 #### Simulation 1: True difference in means
 
@@ -210,7 +210,7 @@ E <- residuals(fit)
 ```
 
 ```{r fig-partone3d, fig.cap="3D Scatterplot of True Difference In Cyclic Means", warning=FALSE, echo=FALSE}
-#| fig-width: 6
+#| fig-width: 5
 #| fig-height: 4
 library(scatterplot3d)
 
@@ -241,8 +241,8 @@ legend(
 ```
 
 ```{r fig-acfone, fig.cap="ACF Plot of Each Dimension's Residuals for True Difference In Cyclic Means", warning=FALSE, echo=FALSE}
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 6
+#| fig-height: 5
 par(mfrow = c(3, 1))
 
 acf(E[, "Y1"], main = "ACF of y1 residuals")
@@ -388,7 +388,7 @@ E <- residuals(fit)
 ```
 
 ```{r fig-parttwo3d, fig.cap="3D Scatterplot of Independence from Cyclic Data", message=FALSE, warning=FALSE, echo=FALSE}
-#| fig-width: 6
+#| fig-width: 5
 #| fig-height: 4
 library(scatterplot3d)
 
@@ -419,8 +419,8 @@ legend(
 ```
 
 ```{r fig-acftwo, fig.cap="ACF Plot of Each Dimension's Residuals for Independence from Cyclic Data", echo=FALSE, warning=FALSE}
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 6
+#| fig-height: 5
 par(mfrow = c(3, 1))
 
 
@@ -430,6 +430,7 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 ```
 
 # Results
+\begin{center}
 
 \captionof{table}{True Difference in Means Trial Results (Expected: Reject Null)}
 \label{tbl-true-difference-means}
@@ -448,6 +449,8 @@ True $Y_2$ value & 100.0\% \\
 True $Y_3$ value & 100.0\% \\
 \hline
 \end{tabular}
+\end{center}
+
 
 \par\vspace{2em}
 
@@ -456,6 +459,7 @@ In the first experiment involving a true difference in means with an independenc
 
 \par\vspace{2em}
 
+\begin{center}
 
 \captionof{table}{Independence from Cyclic Data Trial Results (Expected: Fail to Reject Null)}
 \label{tbl-cyclic-independence}
@@ -474,6 +478,7 @@ True $Y_2$ value & 98.6\% \\
 True $Y_3$ value & 98.4\% \\
 \hline
 \end{tabular}
+\end{center}
 
 \par\vspace{2em}
 
@@ -483,7 +488,7 @@ For the second experiment with achieving independence from same distribution cyc
 
 # Discussion
 
-When considering the aggregated outcomes of 1000 trials for each research setting, there was neither MANOVA nor ANOVA outperformed the other in entirety. When there was a true difference in means but an independence violation, MANOVA was clearly the superior technique A shortcoming in our first experiment would be the difficulty in obtaining a majority decision; differences in mean vectors may be more apparent if there are additional populations in the simulation. In the second scenario, when populations had the same mean but enough noise added for data independence, both methods performed equally well. A weakness of this experiment is that the normally distributed noise may contributed a larger signal than the cyclic data. Future areas of study could involve larger scale data with only minor mean differences or additional errors introduced in a portion of dependent vectors. 
+When considering the aggregated outcomes of 1000 trials for each research setting, neither MANOVA nor ANOVA outperformed the other in entirety. When there is a true difference in means but an independence violation, MANOVA was clearly the superior technique. A shortcoming in our first experiment would be the difficulty in obtaining a majority decision; differences in mean vectors may be more apparent if there are additional populations in the simulation. In the second scenario, when populations had the same mean but enough noise added for data independence, both methods performed equally well. A weakness of this experiment is that the normally distributed noise may contribute a larger signal than the cyclic data. Future areas of study could involve larger scale data with only minor mean differences or additional errors introduced in a portion of dependent vectors. It would also be valuable to explore differing cycle lengths between populations can affect the corresponding behavior of MANOVA.
 
 \newpage
 
