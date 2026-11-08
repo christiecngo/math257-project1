@@ -12,6 +12,7 @@ format:
       text: |
         \usepackage{float}
         \usepackage{placeins}
+        \usepackage{caption}
 bibliography: references.bib
 number-sections: true
 ---
@@ -30,6 +31,8 @@ MANOVA is a model for comparison of multivariate mean vectors. The observation v
 
 $$\boldsymbol{X}_{lj} = \boldsymbol{\mu} + \boldsymbol{\tau}_l + \boldsymbol{e}_{lj}$$ $l$ is the number of observations in each group whereas $j$ represents the number of groups. Each component in $\boldsymbol{X}_{lj}$ satisfies the univariate ANOVA model. $\boldsymbol{\mu}$ is the overall mean while $\boldsymbol{\tau}_{l}$ is the treatment effect of the $l^{th}$ treatment subject to the constraint $\sum^g_{l=1} n_l\tau_l = 0$ for identifiability. $\mathbf{e}_{lj}$ are errors represented by independent variables of distribution $N_p(0, \Sigma)$.
 
+AS an extension of ANOVA, MANOVA differs from univariate because the method tests multiple variables simultaneously instead of aggregating results at the end. We expect MANOVA to perform more consistently as there is a lower chance of obtaining spurious results than when we observe univariate dependent variables. 
+
 ## Assumptions
 
 - Both populations are distributed as multivariate normal (univariate normal for ANOVA).
@@ -42,17 +45,17 @@ $$\boldsymbol{X}_{lj} = \boldsymbol{\mu} + \boldsymbol{\tau}_l + \boldsymbol{e}_
 
 We let the baseline population be $1$ and the modified population be $2$. Our testing is as followed:
 
-ANOVA (for each of the dimensions):
+\centerline{ANOVA (for each of the dimensions):}
 
-$H_0: \mu_1 = \mu_2$
+$$H_0: \mu_1 = \mu_2$$
 
-$H_a: \mu_1 \neq \mu_2$
+$$H_a: \mu_1 \neq \mu_2$$
 
-MANOVA:
+\centerline{MANOVA:}
 
-$H_0: \vec{\mu}_1 = \vec{\mu}_2$
+$$H_0: \vec{\mu}_1 = \vec{\mu}_2$$
 
-$H_a: \vec{\mu}_1 \neq \vec{\mu}_2$
+$$H_a: \vec{\mu}_1 \neq \vec{\mu}_2$$
 
 ## Multiple Testing Correction
 
@@ -68,11 +71,11 @@ In both generated datasets, we create two populations with three dimensions and 
 
 #### Cyclic Dependency
 
-To visually assess the strength of the cyclic relationship, we use the Autocorrelation Function (ACF) plot. At each lag, or data at a set point a past time, we are able to determine its correlation with the series. Repeating peaks at predictable time intervals indicate seasonality. The blue dotted bands represent a 95% confidence limit, which tests for correlations within observations. If spikes fall within the bands, then it can be treated as random noise.
+To visually assess the strength of the cyclic relationship, we use the Autocorrelation Function (ACF) plot. At each lag, or data at a set point a past time, we are able to determine its correlation with the series. Repeating peaks at predictable time intervals indicate seasonality. The blue dotted bands represent a 95% confidence limit, which tests for correlations within observations. If spikes fall within the bands, then it can be treated as random noise. 
 
 #### Simulation 1: True difference in means
 
-We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. The differences are apparent in the lack of overlap between the populations in @fig-partone3d. Using the @fig-acfone plot below, we can confirm that there is still seasonality in our generated dataset.
+We want to maintain the cyclic structure, so we add a small amount of normally distributed noise but with a slightly shifted mean of 0.12. The differences are apparent in the lack of overlap between the populations in @fig-partone3d. Using the @fig-acfone plot below, we can confirm that there is still seasonality in our generated dataset.  
 
 ```{r, include=FALSE}
 library(mvtnorm)
@@ -428,11 +431,7 @@ acf(E[, "Y3"], main = "ACF of y3 residuals")
 
 # Results
 
-In the first experiment involving a true difference in means with an independence violation, MANOVA undoubtedly returned better results (@tbl-true-difference-means). Although each univariate ANOVA successfully captured the true difference in means parameter for each dimension in all of the trials, the majority decision never rejected the null hypothesis. On the other hand, MANOVA acknowledged the true difference in means for 76% of the trials. In this case, MANOVA is more promising for detecting a small population difference within cyclic data.
-
-\begin{table}[H]
-\centering
-\caption{True Difference in Means Trial Results (Expected: Reject Null)}
+\captionof{table}{True Difference in Means Trial Results (Expected: Reject Null)}
 \label{tbl-true-difference-means}
 \begin{tabular}{lc}
 \hline
@@ -449,13 +448,16 @@ True $Y_2$ value & 100.0\% \\
 True $Y_3$ value & 100.0\% \\
 \hline
 \end{tabular}
-\end{table}
 
-\FloatBarrier
+\par\vspace{2em}
 
-\begin{table}[H]
-\centering
-\caption{Independence from Cyclic Data Trial Results (Expected: Fail to Reject Null)}
+
+In the first experiment involving a true difference in means with an independence violation, MANOVA undoubtedly returned better results (Table~\ref{tbl-true-difference-means}). Although each univariate ANOVA successfully captured the true difference in means parameter for each dimension in all of the trials, the majority decision never rejected the null hypothesis. On the other hand, MANOVA acknowledged the true difference in means for 76% of the trials. In this case, MANOVA is more promising for detecting a small population difference within cyclic data.
+
+\par\vspace{2em}
+
+
+\captionof{table}{Independence from Cyclic Data Trial Results (Expected: Fail to Reject Null)}
 \label{tbl-cyclic-independence}
 \begin{tabular}{lc}
 \hline
@@ -472,15 +474,16 @@ True $Y_2$ value & 98.6\% \\
 True $Y_3$ value & 98.4\% \\
 \hline
 \end{tabular}
-\end{table}
 
-\FloatBarrier
+\par\vspace{2em}
 
-For the second experiment with achieving independence from same distribution cyclic data, the results of both methods were comparable (@tbl-cyclic-independence). In this setting, ANOVA confidence intervals for the true difference in means contained the true parameter roughly 98% of the time, instead of 100% as it was previously. ANOVA failed to reject the null hypothesis in every trial while MANOVA failed to reject 99.3% of the time. Since the added normal noise had a sizable standard deviation and the population scatterplots are entirely overlapped, it is expected that both methods were able to easily detect no difference in means.
+
+For the second experiment with achieving independence from same distribution cyclic data, the results of both methods were comparable (Table~\ref{tbl-cyclic-independence}). In this setting, ANOVA confidence intervals for the true difference in means contained the true parameter roughly 98% of the time, instead of 100% as it was previously. ANOVA failed to reject the null hypothesis in every trial while MANOVA failed to reject 99.3% of the time. Since the added normal noise had a sizable standard deviation and the population scatterplots are entirely overlapped, it is expected that both methods were able to easily detect no difference in means.
+
 
 # Discussion
 
-When considering the aggregated outcomes of 1000 trials for each research setting, there was neither MANOVA nor ANOVA outperformed the other in entirety. When there was a true difference in means but an independence violation, MANOVA is the clear technique to implement. A shortcoming in our first experiment would be the difficulty in obtaining a majority decision; if more dependent responses were added, it may be easier to observe the differences. Only the last dependent vector uses sine of $2x$ as a function, which makes differences more apparent. In the second scenario, when populations had the same mean but enough noise added for data independence, both methods performed equally well. A weakness of this experiment is that the normally distributed noise may contributed a larger signal than the cyclic data. Future areas of study could involve larger scale data with errors added to only some dependent vectors.
+When considering the aggregated outcomes of 1000 trials for each research setting, there was neither MANOVA nor ANOVA outperformed the other in entirety. When there was a true difference in means but an independence violation, MANOVA was clearly the superior technique A shortcoming in our first experiment would be the difficulty in obtaining a majority decision; differences in mean vectors may be more apparent if there are additional populations in the simulation. In the second scenario, when populations had the same mean but enough noise added for data independence, both methods performed equally well. A weakness of this experiment is that the normally distributed noise may contributed a larger signal than the cyclic data. Future areas of study could involve larger scale data with only minor mean differences or additional errors introduced in a portion of dependent vectors. 
 
 \newpage
 
