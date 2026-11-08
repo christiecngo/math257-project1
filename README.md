@@ -17,7 +17,7 @@ The "Code" subfolder contains the Quarto file (that generated the report), refer
 
 ## External Resources
 
-The final report and code were written by Christie Ngo, but the following resources were used for preliminary research:
+The final report and code were written by Christie Ngo, but the following resources were used for formatting tables and figures as well as some conceptual verification:
 
 * LLM-based chatbots (ex. ChatGPT Edu)
 
