@@ -29,7 +29,7 @@ Findings indicate that MANOVA is considerably superior to ANOVA at detecting a t
 
 MANOVA is a model for comparison of multivariate mean vectors. The observation vector takes the form:
 
-$$\boldsymbol{X}_{lj} = \boldsymbol{\mu} + \boldsymbol{\tau}_l + \boldsymbol{e}_{lj}$$ $l$ is the number of observations in each group whereas $j$ represents the number of groups. Each component in $\boldsymbol{X}_{lj}$ satisfies the univariate ANOVA model. $\boldsymbol{\mu}$ is the overall mean while $\boldsymbol{\tau}_{l}$ is the treatment effect of the $l^{th}$ treatment subject to the constraint $\sum^g_{l=1} n_l\tau_l = 0$ for identifiability. $\mathbf{e}_{lj}$ are errors represented by independent variables of distribution $N_p(0, \Sigma)$.
+$$\boldsymbol{X}_{lj} = \boldsymbol{\mu} + \boldsymbol{\tau}_l + \boldsymbol{e}_{lj}$$ This notation references @johnson2007applied. $l$ is the number of observations in each group whereas $j$ represents the number of groups. Each component in $\boldsymbol{X}_{lj}$ satisfies the univariate ANOVA model. $\boldsymbol{\mu}$ is the overall mean while $\boldsymbol{\tau}_{l}$ is the treatment effect of the $l^{th}$ treatment subject to the constraint $\sum^g_{l=1} n_l\tau_l = 0$ for identifiability. $\mathbf{e}_{lj}$ are errors represented by independent variables of distribution $N_p(0, \Sigma)$.
 
 AS an extension of ANOVA, MANOVA differs from univariate because the method tests multiple variables simultaneously instead of aggregating results at the end. We expect MANOVA to perform more consistently as there is a lower chance of obtaining spurious results than when we observe univariate dependent variables. 
 
